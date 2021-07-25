@@ -12,10 +12,10 @@ cachedRobuxAmount = 0
 
 # Constants
 desktopNotifications = False
-minimumDealPercent = 5
-minuteRefresh = 5
-lowerValueBound = 125000
-upperValueBound = 275000
+minimumDealPercent = 10
+refreshTime = 30 # Amount of seconds until the while loop starts again
+lowerValueBound = 135000
+upperValueBound = 230000
 
 # Header
 header = {
@@ -95,22 +95,28 @@ class Item:
 
 
 # Constructing classes
-for key in cachedItemsJSON:
-    itemIndex = cachedItemsJSON[str(key)]
+def declareClasses():
+    Items.clear()
 
-    itemName = itemIndex[0]
-    value = itemIndex[3]
+    for key in cachedItemsJSON:
+        itemIndex = cachedItemsJSON[str(key)]
 
-    if value >= lowerValueBound and value <= upperValueBound:
-        Item(key, itemName)
+        itemName = itemIndex[0]
+        value = itemIndex[3]
+
+        if value >= lowerValueBound and value <= upperValueBound:
+            Item(key, itemName)
 
 while True:
     cachedItemsJSON = retrieveItemsJSON()
     cachedRobuxAmount = RobuxFetching.retrieveRobux()
 
+    # Retrieve the items
+    declareClasses()
+
     for item in Items:
         item.checkForItemDeal()
 
-        time.sleep(1.5)
+        time.sleep(0.2)
 
-    time.sleep(60*minuteRefresh)
+    time.sleep(refreshTime)
