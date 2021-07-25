@@ -88,7 +88,7 @@ class Item:
                     notification.notify(
                         title = hookTitle,
 
-                        message = "Best Price: " + str(best_price),
+                        message = desc,
 
                         timeout = 5
                     )
