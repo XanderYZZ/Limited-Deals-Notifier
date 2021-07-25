@@ -15,10 +15,10 @@ cachedRobuxAmount = 0
 messageColor = 'dc143c'
 Webhook_URL = "https://discord.com/api/webhooks/868962397682012211/TVbEfu6roYY2u2jw5hgne7TnKRd0kh0X9r8WOI0qxcefAnOoZI5xEf-WxtnyX5yUAhpX"
 desktopNotifications = False
-minimumDealPercent = 15
+minimumDealPercent = 5
 minuteRefresh = 5
-lowerValueBound = 110000
-upperValueBound = 200000
+lowerValueBound = 125000
+upperValueBound = 275000
 
 # Header
 header = {
@@ -89,10 +89,10 @@ class Item:
 
         if best_price and cachedRobuxAmount >= best_price:
             difference = value - best_price
-            percent_deal = (difference / value)
+            percent_deal = (difference / value) * 100 # Multiplied by 100 because it represents a percentage so it needs to be
 
             if percent_deal >= minimumDealPercent:
-                hookTitle = self.itemName + " Deal (" + str(round(percent_deal)) + "%)"
+                hookTitle = self.itemName + " Deal (" + str(round(percent_deal, 2)) + "%)"
                 desc = self.itemName + " selling for: " + "{:,}".format(best_price)
 
                 itemURL = "https://www.roblox.com/catalog/" + self.itemID
