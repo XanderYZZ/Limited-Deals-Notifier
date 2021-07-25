@@ -104,7 +104,6 @@ class Item:
                         timeout = 5
                     )
 
-                    
 
 # Constructing classes
 for key in cachedItemsJSON:
