@@ -25,8 +25,6 @@ header = {
 # Tables
 Items = []
 
-# Use item details instead of scraping (work on this)
-
 # [item_name, acronym, rap, value, default_value, demand, trend, projected, hyped, rare]
 cachedItemsJSON = requests.get(url="https://www.rolimons.com/itemapi/itemdetails")
 
@@ -34,10 +32,8 @@ cachedItemsJSON = json.loads(cachedItemsJSON.content)
 
 cachedItemsJSON = cachedItemsJSON["items"]
 
-#print(cachedItemsJSON["4390891467"][3])
-
 def sendWebhook(hookContent):
-    webhookData = {"content": hookContent, "title": "Testing title"}
+    webhookData = {"content": hookContent}
     requests.post(Webhook, json = webhookData)
 
 sendWebhook("Testing the message")
@@ -63,7 +59,6 @@ class Item:
             best_price = 0
 
             if text['data']:
-                #print("it did exist for " + str(self.itemID))
                 responseData = text['data'][0]
 
                 if 'price' in responseData:
@@ -72,8 +67,6 @@ class Item:
                 self.cachedBestPrice = best_price
 
                 return best_price
-            #else:
-                #print("it didn't exist for " + str(self.itemID))
 
     def checkForItemDeal(self):
         value = self.retrieveItemValue()
@@ -100,8 +93,6 @@ class Item:
                     
 
 # Constructing classes
-amountOfItemsTracking = 0
-
 for key in cachedItemsJSON:
     itemIndex = cachedItemsJSON[str(key)]
 
@@ -110,10 +101,6 @@ for key in cachedItemsJSON:
 
     if value >= lowerValueBound and value <= upperValueBound:
         Item(key, itemName)
-
-        amountOfItemsTracking += 1
-
-print(amountOfItemsTracking)
 
 while True:
     cachedRobuxAmount = RobuxFetching.retrieveRobux()
