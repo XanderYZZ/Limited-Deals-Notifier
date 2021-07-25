@@ -29,11 +29,16 @@ header = {
 Items = []
 
 # [item_name, acronym, rap, value, default_value, demand, trend, projected, hyped, rare]
-cachedItemsJSON = requests.get(url="https://www.rolimons.com/itemapi/itemdetails")
+def retrieveItemsJSON():
+    cachedItemsJSON = requests.get(url="https://www.rolimons.com/itemapi/itemdetails")
 
-cachedItemsJSON = json.loads(cachedItemsJSON.content)
+    cachedItemsJSON = json.loads(cachedItemsJSON.content)
 
-cachedItemsJSON = cachedItemsJSON["items"]
+    cachedItemsJSON = cachedItemsJSON["items"]
+
+    return cachedItemsJSON
+
+cachedItemsJSON = retrieveItemsJSON()
 
 def sendWebhook(hookTitle, hookDescription, itemURL, imageURL, itemName):
     webhook = DiscordWebhook(url=Webhook_URL)
@@ -116,6 +121,7 @@ for key in cachedItemsJSON:
         Item(key, itemName)
 
 while True:
+    cachedItemsJSON = retrieveItemsJSON()
     cachedRobuxAmount = RobuxFetching.retrieveRobux()
 
     for item in Items:
