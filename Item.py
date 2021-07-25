@@ -12,6 +12,7 @@ import RobuxFetching
 cachedRobuxAmount = 0
 
 # Constants
+messageColor = 'dc143c'
 Webhook_URL = "https://discord.com/api/webhooks/868962397682012211/TVbEfu6roYY2u2jw5hgne7TnKRd0kh0X9r8WOI0qxcefAnOoZI5xEf-WxtnyX5yUAhpX"
 desktopNotifications = False
 minimumDealPercent = 0
@@ -34,14 +35,13 @@ cachedItemsJSON = json.loads(cachedItemsJSON.content)
 
 cachedItemsJSON = cachedItemsJSON["items"]
 
-def sendWebhook(hookTitle, hookDescription, itemURL):
-    print("Function Called")
-    print(itemURL)
-
+def sendWebhook(hookTitle, hookDescription, itemURL, imageURL, itemName):
     webhook = DiscordWebhook(url=Webhook_URL)
 
     # Color is decimal or hex
-    embed = DiscordEmbed(title=hookTitle, url = itemURL, description=hookDescription, color='03b2f8')
+    embed = DiscordEmbed(title=hookTitle, url = itemURL, description=hookDescription, color=messageColor)
+
+    embed.set_author(name=itemName, url=itemURL, icon_url=imageURL)
 
     # Add the embed object to the webhook
     webhook.add_embed(embed)
@@ -88,11 +88,12 @@ class Item:
 
             if percent_deal >= minimumDealPercent:
                 hookTitle = self.itemName + " Deal (" + str(round(percent_deal)) + "%)"
-                desc = self.itemName + " selling for: " + str(best_price)
+                desc = self.itemName + " selling for: " + "{:,}".format(best_price)
 
                 itemURL = "https://www.roblox.com/catalog/" + self.itemID
+                imageURL = "https://www.roblox.com/asset-thumbnail/image?assetId=" + self.itemID + "&width=420&height=420&format=png"
 
-                sendWebhook(hookTitle, desc, itemURL)
+                sendWebhook(hookTitle, desc, itemURL, imageURL, self.itemName)
 
                 if desktopNotifications:
                     notification.notify(
