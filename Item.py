@@ -3,6 +3,8 @@ import json
 import time
 from plyer import notification
 
+from discord_webhook import DiscordWebhook, DiscordEmbed
+
 # Files
 import RobuxFetching
 
@@ -10,7 +12,7 @@ import RobuxFetching
 cachedRobuxAmount = 0
 
 # Constants
-Webhook = "https://discord.com/api/webhooks/868962397682012211/TVbEfu6roYY2u2jw5hgne7TnKRd0kh0X9r8WOI0qxcefAnOoZI5xEf-WxtnyX5yUAhpX"
+Webhook_URL = "https://discord.com/api/webhooks/868962397682012211/TVbEfu6roYY2u2jw5hgne7TnKRd0kh0X9r8WOI0qxcefAnOoZI5xEf-WxtnyX5yUAhpX"
 desktopNotifications = False
 minimumDealPercent = 0
 minuteRefresh = 5
@@ -32,11 +34,19 @@ cachedItemsJSON = json.loads(cachedItemsJSON.content)
 
 cachedItemsJSON = cachedItemsJSON["items"]
 
-def sendWebhook(hookContent):
-    webhookData = {"content": hookContent}
-    requests.post(Webhook, json = webhookData)
+def sendWebhook(hookTitle, hookDescription, itemURL):
+    print("Function Called")
+    print(itemURL)
 
-sendWebhook("Testing the message")
+    webhook = DiscordWebhook(url=Webhook_URL)
+
+    # Color is decimal or hex
+    embed = DiscordEmbed(title=hookTitle, url = itemURL, description=hookDescription, color='03b2f8')
+
+    # Add the embed object to the webhook
+    webhook.add_embed(embed)
+
+    response = webhook.execute()
 
 class Item:
     def __init__(self, itemID, itemName):
@@ -77,13 +87,16 @@ class Item:
             percent_deal = (difference / value)
 
             if percent_deal >= minimumDealPercent:
-                webhookMessage = self.itemName + " selling for: " + str(best_price)
+                hookTitle = self.itemName + " Deal (" + str(round(percent_deal)) + "%)"
+                desc = self.itemName + " selling for: " + str(best_price)
 
-                sendWebhook(webhookMessage)
+                itemURL = "https://www.roblox.com/catalog/" + self.itemID
+
+                sendWebhook(hookTitle, desc, itemURL)
 
                 if desktopNotifications:
                     notification.notify(
-                        title = self.itemName + " Deal (" + str(round(percent_deal)) + "%)",
+                        title = hookTitle,
 
                         message = "Best Price: " + str(best_price),
 
