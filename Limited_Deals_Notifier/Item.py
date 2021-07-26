@@ -12,10 +12,11 @@ cachedRobuxAmount = 0
 
 # Constants
 desktopNotifications = False
-minimumDealPercent = 10
-refreshTime = 300 # Amount of seconds until the while loop starts again
-lowerValueBound = 135000
-upperValueBound = 230000
+minimumDealPercent = 20
+timeBetweenItem = 0.1
+refreshTime = 60 # Amount of seconds until the while loop starts again
+lowerValueBound = 6000
+upperValueBound = 20000
 
 # Header
 header = {
@@ -117,6 +118,6 @@ while True:
     for item in Items:
         item.checkForItemDeal()
 
-        time.sleep(1)
+        time.sleep(timeBetweenItem)
 
     time.sleep(refreshTime)
