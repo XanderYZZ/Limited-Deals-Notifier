@@ -1,7 +1,7 @@
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 messageColor = 'dc143c'
-Webhook_URL = "https://discord.com/api/webhooks/868962397682012211/TVbEfu6roYY2u2jw5hgne7TnKRd0kh0X9r8WOI0qxcefAnOoZI5xEf-WxtnyX5yUAhpX"
+Webhook_URL = "PUT YOUR WEBHOOK URL HERE"
 
 def sendWebhook(hookTitle, hookDescription, itemURL, imageURL, itemName):
     webhook = DiscordWebhook(url=Webhook_URL)
